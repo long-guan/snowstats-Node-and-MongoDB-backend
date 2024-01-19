@@ -1,0 +1,42 @@
+volumes:
+  postgres-snowstat-data:
+    external: true
+services:
+  frontend:
+    image: node:lts-bullseye
+    command: /bin/bash run.sh
+    working_dir: /frontend_react
+    volumes:
+      - ./frontend_react:/frontend_react
+    ports:
+      - "3000:3000"
+    environment:
+      # PUBLIC_URL: http://localhost:3000
+      # VITE_DJANGO_API: http://localhost:8000
+      HOST_OS: ${OS}
+      NODE_ENV: development
+      HOST: "0.0.0.0"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - database
+    environment:
+      DATABASE_URL: postgres://snowstats_admin:snowstat_sadmin@localhost:5432/snowstats_db
+      WAIT_HOSTS: database:5432
+      WAIT_TIMEOUT: 240
+  database:
+    image: postgres:14.5-bullseye
+    volumes:
+      - postgres-snowstat-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: snowstat_sadmin
+      POSTGRES_USER: snowstats_admin
+      POSTGRES_DB: snowstats_db
+    ports:
+      - 15432:5432

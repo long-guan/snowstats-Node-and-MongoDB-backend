@@ -1,0 +1,18 @@
+#!/bin/bash
+
+FROM python:3.10-bullseye
+ENV PYTHONUNBUFFERED 1
+WORKDIR /app
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.9.0/wait /wait
+RUN chmod +x /wait
+COPY requirements.txt requirements.txt
+
+COPY manage.py manage.py
+COPY backend backend
+COPY common common
+COPY scripts scripts
+COPY stevenspass stevenspass
+
+RUN pip install -r requirements.txt
+EXPOSE 8000
+CMD /wait && python manage.py migrate && python manage.py runserver "0.0.0.0:8000"

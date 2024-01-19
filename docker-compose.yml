@@ -18,25 +18,25 @@ services:
       HOST: "0.0.0.0"
   backend:
     build:
-      context: ./backend
+      context: ./backend_express
       dockerfile: ./Dockerfile.dev
     ports:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    depends_on:
-      - database
-    environment:
-      DATABASE_URL: postgres://snowstats_admin:snowstat_sadmin@localhost:5432/snowstats_db
-      WAIT_HOSTS: database:5432
-      WAIT_TIMEOUT: 240
-  database:
-    image: postgres:14.5-bullseye
-    volumes:
-      - postgres-snowstat-data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_PASSWORD: snowstat_sadmin
-      POSTGRES_USER: snowstats_admin
-      POSTGRES_DB: snowstats_db
-    ports:
-      - 15432:5432
+    # depends_on:
+    #   - database
+    # environment:
+    #   DATABASE_URL: postgres://snowstats_admin:snowstat_sadmin@localhost:5432/snowstats_db
+    #   WAIT_HOSTS: database:5432
+    #   WAIT_TIMEOUT: 240
+  # database:
+  #   image: postgres:14.5-bullseye
+  #   volumes:
+  #     - postgres-snowstat-data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_PASSWORD: snowstat_sadmin
+  #     POSTGRES_USER: snowstats_admin
+  #     POSTGRES_DB: snowstats_db
+  #   ports:
+  #     - 15432:5432

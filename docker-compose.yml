@@ -1,6 +1,5 @@
 volumes:
   mongodb-snowstat-data:
-    external: true
 services:
   frontend:
     image: node:lts-bullseye
@@ -22,19 +21,19 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app
-    depends_on:
-      - database
+    # depends_on:
+    #   - database
     environment:
       MONGODB_URL: mongodb://snowstats_admin.snowstat_sadmin.net:27017/snowstats_db
       WAIT_HOSTS: database:27017
       WAIT_TIMEOUT: 240
-  database:
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: snowstats_admin
-      MONGO_INITDB_ROOT_PASSWORD: snowstat_sadmin
-      MONGO_INITDB_DATABASE: snowstats_db
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb-snowstat-data:/data/db
+  # database:
+  #   image: mongo:latest
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: username
+  #     MONGO_INITDB_ROOT_PASSWORD: password
+  #     MONGO_INITDB_DATABASE: mongodb
+  #   ports:
+  #     - 27017:27017
+  #   volumes:
+  #     - mongodb-snowstat-data:/data/db
